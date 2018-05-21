@@ -8,22 +8,22 @@ This project configures 5 nodes, each with their own PrivateTransactionManager. 
 All logs and temporary data will be written to the `qdata` folder.
 
 
-## Smart contracts
+## Smart contracts:
 There are two smart contracts, both stored in the `contracts.sol` file and lightly commented:
 
-1- bankContract
+1- bankContract:
 
 This contract implements the main logic of the cross-border payement system. One PRIVATE instance of the contract must be deployed for EACH participating bank on the network and it will store private transaction data and balance. It has many verification steps to avoid bank personification, fraud and overdraft transactions. Most of the checks are made by the contract itself, but the overdraft protection must be made by an active regulator node. 
 
-2- regulatorTransactionList
+2- regulatorTransactionList:
 
 This contract stores and serves the public data to the private contracts. Public data are transactions hashes and participating banks information.
 
-3- supplyContract
+3- supplyContract:
 
 This contract stores and serves position and owner of supplies.
 
-## Transaction confirmation logic
+## Transaction confirmation logic:
 Transactions are published privately by the sender bank and must only be sent to the recipient and to the regulator nodes (privateFor parameter). They are created in an UNCONFIRMED state and are only final if they are confirmed. After publishing the private transaction, the sender bank must publish the same transaction hash in the public transaction log (regulatorTransactionList public contract) to ensure that all the parts are aware of the transaction. Transactions can only be confirmed and reflect on bank balances if they are stored in the public transaction log and they can be confirmed by two ways:
 
 1- By the regulator calling the confirmTransactionRegulator function
@@ -32,13 +32,13 @@ Transactions are published privately by the sender bank and must only be sent to
 
 This two phase commit is needed because there is no overdraft protecting in the bankContract code because different bank instances have different data. For example, bank1 smart contract published in the bank1 node has the balance variable set, but the same contract with the same address in the bank2 node has no value in the balance data because this data is private to bank1 and the regulator. The regulator node´s contracts have all the data as it must be part of every private transaction. The logic behind this proccess is that, after a transaction is published, the regulator can check the sender balance against the newly published transaction. If the value intended for the transfer is higher than the bank balance, the regulator must block this transaction during the confirmation time. If the value is below the balance OR if the regulator is offline, the sender bank can confirm its own transaction after the confirmation time. This is a resiliency feature to ensure that the cross-border payement system endures a regulator outage.
 
-## Environment setup
-### Virtual machine Quorum and Constellation install
+## Environment setup:
+### Virtual machine Quorum and Constellation install:
 1- Start with a clean Ubuntu 16.04 virtual machine install
 
 2- Run "install.sh" script to install Constellation, GO and Quorum
  
-### Quorum set up and start
+### Quorum set up and start:
 1- call raft-init.sh to initialize accounts and keystores
 
 2- Bring the 5 nodes up calling raft-start.sh
@@ -57,12 +57,12 @@ terminal 5: ``$ geth attach ipc:qdata/dd5/geth.ipc``
 
 Terminal 1-3 are banks 1-3, terminal 4 is the regulator and terminal 5 is the observer used to test privacy.
 
-### Running cross-border payement
+### Running cross-border payement:
 4- Run the following commands, three times for each one, in the javascript quorum console on terminal 4 (regulator):
  
-	- ``loadScript("deploy-bankContract.js");``
+	- loadScript("deploy-bankContract.js");
 	
-	- ``loadScript("deploy-supplyContract.js");``
+	- loadScript("deploy-supplyContract.js");
 
 5- Take note of the 3 bank contract addresses. It can take some seconds, but the geth console will eventually provide an output like "Contract mined! address: 0x...". These are bank1, bank2 and bank3 private contracts instances addresses (the same for supply1, supply2 and supply3 addresses).
 
