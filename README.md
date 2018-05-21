@@ -9,7 +9,7 @@ All logs and temporary data will be written to the `qdata` folder.
 
 
 ## Smart contracts:
-There are two smart contracts, both stored in the `contracts.sol` file and lightly commented:
+There are 3 smart contracts, all stored in the `contracts.sol` file and lightly commented:
 
 1- bankContract:
 
