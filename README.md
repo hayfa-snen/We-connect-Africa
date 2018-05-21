@@ -36,12 +36,12 @@ This two phase commit is needed because there is no overdraft protecting in the 
 ### Virtual machine Quorum and Constellation install:
 1- Start with a clean Ubuntu 16.04 virtual machine install
 
-2- Run "install.sh" script to install Constellation, GO and Quorum
+2- Run `install.sh` script to install Constellation, GO and Quorum
  
 ### Quorum set up and start:
-1- call raft-init.sh to initialize accounts and keystores
+1- call `raft-init.sh` to initialize accounts and keystores
 
-2- Bring the 5 nodes up calling raft-start.sh
+2- Bring the 5 nodes up calling `raft-start.sh`
 
 3- Connect to the nodes calling:
 
